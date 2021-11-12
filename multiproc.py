@@ -3,8 +3,7 @@ import multiprocessing as mp
 import Kepler as kp
 
 def random_init_RK4(i, E):
-    x,y,vx,vy=kp.initialConditions(E)
-    w=[x,y,vx,vy]
+    w=kp.initialConditions(E)
     L,T,e = kp.RK4(1e-3,100000,kp.majpos_HH,w,0)
     return(L)
 
