@@ -2,6 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random as r
 import math as m
+
+
 #w vecteur dans l'espace des phases => w=[x,y,vx,vy]
 def majpos(t,w):
     new_w=np.zeros(4)
@@ -72,7 +74,7 @@ def RK4(h,n,f,w0,t0):
         P[i]=potentialEnergy(L[i])
         T.append(t)
     E = K+P
-    return(L,T,E)
+    return(L)
 
 def kineticEnergy(w):
     v = (w[2]**2 + w[3]**2)**0.5
@@ -121,28 +123,36 @@ def initialConditions(E):
     vymax = (2*E - x**2)**0.5
     vy = r.uniform(0,vymax)
     vx = (2*E - vy**2 - x**2)**0.5
-    return (x,y,vx,vy)
+    return np.array((x,y,vx,vy))
 
 def poincarreSection(L):
-    sectionV = []
+    sectionVY = []
     sectionY = []
     for k in range(np.shape(L)[0]-1):
         if (L[k,0]*L[k+1,0])<0:
+            print((L[k,0]*L[k+1,0])<0)
             sectionY.append(L[k,1]-L[k,0]*(abs(L[k+1,1]-L[k,1]))/(abs(L[k+1,0]-L[k,0])))
-            sectionV.append(L[k,3]-L[k,0]*(abs(L[k+1,3]-L[k,3]))/(abs(L[k+1,0]-L[k,0])))
-    return sectionY,sectionV
+            sectionVY.append(L[k,3]-L[k,0]*(abs(L[k+1,3]-L[k,3]))/(abs(L[k+1,0]-L[k,0])))
+    return sectionY,sectionVY
             
 
-x,y,vx,vy = initialConditions(1/100)
-w=[x,y,vx,vy]
-L=[]
-T=[]
-E=[]
-sectionY=[]
-sectionV=[]
-L,T,E = RK4(1e-3,100000,majpos_HH,w,0)
 
-plt.plot(L[:,1],(L[:,3]**2+L[:,2]**2)**0.5)
+if __name__ == '__main__':
+    x,y,vx,vy = initialConditions(1/12)
+    w=[x,y,vx,vy]
+    L=[]
+    sectionY=[]
+    sectionV=[]
+    L = RK4(1e-3,500,majpos_HH,w,0)
+    print(np.size(L))
+    sectionY,sectionV = poincarreSection(L)
+    
+    plt.scatter(sectionY,sectionV,marker='+')
+    plt.xlabel('position along y')
+    plt.ylabel('speed along y')
+    
+    
+    
 
 
 
