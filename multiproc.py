@@ -11,7 +11,7 @@ import multiprocessing as mp
 import Kepler as kp
 import matplotlib.pyplot as plt
 import os 
-
+import time
 
 def random_init_RK4(E):
     w=kp.initialConditions(E)
@@ -26,26 +26,24 @@ def collect_result(result):
 
 
 if __name__ == '__main__':
-    global results
+    t1 = time.time()
+    results = []
     sectionY = []
     sectionVY=[]
     Y=[]
     V=[]
-    pool=mp.Pool(6)
-    results = []
-    pool.apply_async(random_init_RK4, (1/12,), callback=collect_result)
-    
+    pool=mp.Pool(7)
+    [pool.apply_async(random_init_RK4, (1/6,), callback=collect_result) for k in range(500)]
     pool.close()
     pool.join()
-    
-    print(len(results[0]))
-    
+    t2 = time.time()
+    print("solve time =", t2-t1)
     for k in range(len(results)):
         Y,V = kp.poincarreSection(results[k])
         sectionVY += V
         sectionY += Y
-        print(len(sectionVY))
-    plt.scatter(sectionY,sectionVY,marker='+')
+    print(len(sectionVY))
+    plt.scatter(sectionY,sectionVY,marker='o', s=1)
     plt.xlabel('position along y')
     plt.ylabel('speed along y')
 

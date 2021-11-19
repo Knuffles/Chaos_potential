@@ -130,7 +130,6 @@ def poincarreSection(L):
     sectionY = []
     for k in range(np.shape(L)[0]-1):
         if (L[k,0]*L[k+1,0])<0:
-            print((L[k,0]*L[k+1,0])<0)
             sectionY.append(L[k,1]-L[k,0]*(abs(L[k+1,1]-L[k,1]))/(abs(L[k+1,0]-L[k,0])))
             sectionVY.append(L[k,3]-L[k,0]*(abs(L[k+1,3]-L[k,3]))/(abs(L[k+1,0]-L[k,0])))
     return sectionY,sectionVY
