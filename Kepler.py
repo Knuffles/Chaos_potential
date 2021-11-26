@@ -136,19 +136,19 @@ def poincarreSection(L):
             
 
 
-if __name__ == '__main__':
-    x,y,vx,vy = initialConditions(1/12)
-    w=[x,y,vx,vy]
-    L=[]
-    sectionY=[]
-    sectionV=[]
-    L = RK4(1e-3,500,majpos_HH,w,0)
-    print(np.size(L))
-    sectionY,sectionV = poincarreSection(L)
+# if __name__ == '__main__':
+#     x,y,vx,vy = initialConditions(1/12)
+#     w=[x,y,vx,vy]
+#     L=[]
+#     sectionY=[]
+#     sectionV=[]
+#     L = RK4(1e-3,500,majpos_HH,w,0)
+#     print(np.size(L))
+#     sectionY,sectionV = poincarreSection(L)
     
-    plt.scatter(sectionY,sectionV,marker='+')
-    plt.xlabel('position along y')
-    plt.ylabel('speed along y')
+#     plt.scatter(sectionY,sectionV,marker='+')
+#     plt.xlabel('position along y')
+#     plt.ylabel('speed along y')
     
     
     

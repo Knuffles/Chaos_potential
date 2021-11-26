@@ -15,14 +15,17 @@ import time
 
 def random_init_RK4(E):
     w=kp.initialConditions(E)
-    L = kp.RK4(1e-3,100000,kp.majpos_HH,w,0)
-    return(L)
+    L = kp.RK4(1e-3,1000000,kp.majpos_HH,w,0)
+    Y,V = kp.poincarreSection(L)
+    R = [Y,V]
+    return R
 
 
 
-def collect_result(result):
-    results.append(result)
-    return(result)
+def collect_result(R):
+    sectionY.append(R[0])
+    sectionVY.append(R[1])
+    return(sectionY, sectionVY)
 
 
 if __name__ == '__main__':
@@ -30,20 +33,14 @@ if __name__ == '__main__':
     results = []
     sectionY = []
     sectionVY=[]
-    Y=[]
-    V=[]
     pool=mp.Pool(7)
-    [pool.apply_async(random_init_RK4, (1/6,), callback=collect_result) for k in range(500)]
+    [pool.apply_async(random_init_RK4, (1/100,), callback=collect_result) for k in range(100)]
     pool.close()
     pool.join()
     t2 = time.time()
     print("solve time =", t2-t1)
-    for k in range(len(results)):
-        Y,V = kp.poincarreSection(results[k])
-        sectionVY += V
-        sectionY += Y
-    print(len(sectionVY))
-    plt.scatter(sectionY,sectionVY,marker='o', s=1)
+    for k in range(len(sectionY)):  
+        plt.scatter(sectionY[k],sectionVY[k],marker='o', s=1)
     plt.xlabel('position along y')
     plt.ylabel('speed along y')
 
