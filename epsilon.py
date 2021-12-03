@@ -37,7 +37,7 @@ if __name__ == '__main__':
     
     for i in range(len(L)):
         DL.append(np.sqrt((L[i,0]-Leps[i,0])**2 + (L[i,1]-Leps[i,1])**2))
-        Frac.append(abs(norm(w)-norm(weps)))
+        Frac.append(abs(norm(L[i,:])-norm(Leps[i,:])))
         t.append(i)
     
     #tracé des deux trajectoires
@@ -52,6 +52,9 @@ if __name__ == '__main__':
     #tracé de la différence entre les deux trajectoires dans l'espace des phases
     plt.plot(t[40:],Frac[40:])
     plt.loglog()
+    plt.title("E=%f" %E)
+    plt.Xlabel("log(t)")
+    plt.Ylabel("log(|D-Deps|)")
     #tracé dans l'espace des phases
     print(len(sectionV),len(sectionY))
     
