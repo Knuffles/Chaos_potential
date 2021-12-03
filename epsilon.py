@@ -41,13 +41,14 @@ if __name__ == '__main__':
         Frac.append(abs(norm(L[i,:])-norm(Leps[i,:])))
         t.append(i)
     
-    T=np.array(t).reshape((-1,1))
-    F=np.array(Frac)
+    T=np.array(np.log(t[40:])/np.log(10)).reshape((-1,1))
+    F=np.array(np.log(Frac[40:])/np.log(10))
     print(np.shape(T))
     print(np.shape(F))
     regr = linear_model.LinearRegression()
     regr.fit(T,F)
     droite = regr.coef_
+    print(droite)
     
     #tracé des deux trajectoires
 #    plt.plot(L[:,0],L[:,1], label='rk4')
@@ -64,7 +65,6 @@ if __name__ == '__main__':
     plt.ylabel("log(|D-Deps|)")
     plt.title("E=%f" %E)
     plt.loglog(t[40:],Frac[40:])  
-    plt.loglog(t[40:],droite[40:])
 
     #tracé dans l'espace des phases
 #    print(len(sectionV),len(sectionY))
