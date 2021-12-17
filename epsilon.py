@@ -9,11 +9,24 @@ def epsilonInit(w,e):
     w2=np.copy(w)
     w2[0]=w2[0]+e
     return(w2)
+
+#return the slope and the intercept of a given trajectory
+def slope(t,f,tmin,tmax):
+    T=np.array(np.log(t[tmin:tmax])/np.log(10)).reshape((-1,1))
+    F=np.array(np.log(f[tmin:tmax])/np.log(10))
+    regr = linear_model.LinearRegression()
+    regr.fit(T,F)
+    a= regr.coef_
+    b=regr.intercept_
+    return(a[0],b)
+    
     
 if __name__ == '__main__':
     #initial parameters
-    E = 1/6
+    E = 1/100
     eps = 0.00001
+    tmin=9000
+    tmax=120000
     
     
     #random initial conditions
@@ -41,14 +54,14 @@ if __name__ == '__main__':
         Frac.append(abs(norm(L[i,:])-norm(Leps[i,:])))
         t.append(i)
     
-    T=np.array(np.log(t[40:])/np.log(10)).reshape((-1,1))
-    F=np.array(np.log(Frac[40:])/np.log(10))
-    print(np.shape(T))
-    print(np.shape(F))
-    regr = linear_model.LinearRegression()
-    regr.fit(T,F)
-    droite = regr.coef_
-    print(droite)
+
+    tlog=np.log(t[tmin:tmax])/np.log(10)
+    Fraclog=np.log(Frac[tmin:tmax])/np.log(10)
+    
+    a,b=slope(t,Frac,tmin,tmax)
+    RegDroit=[]
+    for i in tlog:
+        RegDroit.append(b+a[0]*i)
     
     #tracé des deux trajectoires
 #    plt.plot(L[:,0],L[:,1], label='rk4')
@@ -61,10 +74,12 @@ if __name__ == '__main__':
     
     #tracé de la différence entre les deux trajectoires dans l'espace des phases
 
-    plt.xlabel("log(t)")
-    plt.ylabel("log(|D-Deps|)")
-    plt.title("E=%f" %E)
-    plt.loglog(t[40:],Frac[40:])  
+#    plt.xlabel("log(t)")
+#    plt.ylabel("log(|D-Deps|)")
+#    plt.title("E=%f" %E)
+##   plt.loglog(t,Frac)
+#    plt.plot(tlog,Fraclog)  
+#    plt.plot(tlog,RegDroit)  
 
     #tracé dans l'espace des phases
 #    print(len(sectionV),len(sectionY))
