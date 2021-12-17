@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import random as r
 import math as m
+from numpy.linalg import norm 
 
 
 #w vecteur dans l'espace des phases => w=[x,y,vx,vy]
@@ -75,6 +76,15 @@ def RK4(h,n,f,w0,t0):
         T.append(t)
     E = K+P
     return(L)
+    
+def lightRK4(h,f,w0,t0):
+    t=t0+h
+    k1=f(t,w0)
+    k2=f(t+h/2,w0+k1*h/2)
+    k3=f(t+h/2,w0+k2*h/2)
+    k4=f(t+h,w0+h*k3)
+    w=w0+(k1+2*k2+2*k3+k4)*h/6
+    return(w,t)
 
 def kineticEnergy(w):
     v = (w[2]**2 + w[3]**2)**0.5
@@ -136,29 +146,25 @@ def poincarreSection(L):
             
 
 
-# if __name__ == '__main__':
-#     x,y,vx,vy = initialConditions(1/12)
-#     w=[x,y,vx,vy]
-#     L=[]
-#     sectionY=[]
-#     sectionV=[]
-#     L = RK4(1e-3,500,majpos_HH,w,0)
-#     print(np.size(L))
-#     sectionY,sectionV = poincarreSection(L)
+if __name__ == '__main__':
+    w= initialConditions(1/12)
+    L=[]
+    Llight=[]
+    sectionY=[]
+    sectionV=[]
+    L = RK4(1e-3,500,majpos_HH,w,0)
+    wl=w
+    tl=0
+    for i in range(500):
+        wl,tl=lightRK4(1e-3,majpos_HH,wl,tl)
+        Llight.append(norm(L[i,:])-norm(wl))
+        if not (norm(L[i,:])-norm(wl)):
+            print(norm(L[i,:])-norm(wl))
+    #tester la différence entre les deux RK4
+    sectionY,sectionV = poincarreSection(L)
     
-#     plt.scatter(sectionY,sectionV,marker='+')
-#     plt.xlabel('position along y')
-#     plt.ylabel('speed along y')
+    plt.scatter(sectionY,sectionV,marker='+')
+    plt.xlabel('position along y')
+    plt.ylabel('speed along y')
     
     
-    
-
-
-
-
-
-
-
-
-
-
