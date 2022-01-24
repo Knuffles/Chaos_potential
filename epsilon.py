@@ -54,39 +54,42 @@ if __name__ == '__main__':
         Frac.append(abs(norm(L[i,:])-norm(Leps[i,:])))
         t.append(i)
     
-
     tlog=np.log(t[tmin:tmax])/np.log(10)
     Fraclog=np.log(Frac[tmin:tmax])/np.log(10)
     
     a,b=slope(t,Frac,tmin,tmax)
     RegDroit=[]
     for i in tlog:
-        RegDroit.append(b+a[0]*i)
+        RegDroit.append(b+a*i)
+
     
-    #tracé des deux trajectoires
+    #both trajectories
+
 #    plt.plot(L[:,0],L[:,1], label='rk4')
 #    plt.plot(Leps[:,0],Leps[:,1], label='rk4+eps')
 #    plt.legend()
-    
+#    plt.ylabel("y")
+#    plt.xlabel("x")
+    #end both trajectories
+#    
     #tracé de la différence entre les deux trajectoires
 #    plt.plot(t[40:],DL[40:])
 #    plt.loglog()
     
-    #tracé de la différence entre les deux trajectoires dans l'espace des phases
+    #trajectory difference in phase space
+    plt.xlabel("log(t)")
+    plt.ylabel("log(|D-Deps|)")
+    plt.title("a=%f" %a)
+    plt.plot(tlog,Fraclog)  
+    plt.plot(tlog,RegDroit)  
+    #end trajectory difference in phase space
 
-#    plt.xlabel("log(t)")
-#    plt.ylabel("log(|D-Deps|)")
-#    plt.title("E=%f" %E)
-##   plt.loglog(t,Frac)
-#    plt.plot(tlog,Fraclog)  
-#    plt.plot(tlog,RegDroit)  
-
-    #tracé dans l'espace des phases
+    #trajectory in phase space
 #    print(len(sectionV),len(sectionY))
     
 #    plt.scatter(sectionY,sectionV,marker='+')
 #    plt.scatter(sectionYeps,sectionVeps,marker='+')
 #    plt.xlabel('position along y')
 #    plt.ylabel('speed along y')
-#    
+#    #end rajectory in phase space
 
