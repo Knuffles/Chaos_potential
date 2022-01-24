@@ -42,8 +42,8 @@ def collect_result(R):
     return(traj)
 
 if __name__ == '__main__':
-    E=np.linspace(0.01,1,11) #pas besoin aller plus haut que 1/6 => reste inutile
-    nb=10 #devrait etre entre 30 et 50
+    E=np.linspace(0.01,0.2,11) 
+    nb=50 
     eps = 0.00001
     print(E)
     chaostest=np.zeros(len(E))
