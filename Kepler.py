@@ -37,7 +37,7 @@ def Euler(h,n,f,w0,t0):
         K[i]=kineticEnergy(L[i])
         P[i]=potentialEnergy(L[i])
     E = K+P
-    return(L,T,E)
+    return(L,E)
     
 def RK2(h,n,f,w0,t0):
     L=np.zeros((n,4))
@@ -55,7 +55,7 @@ def RK2(h,n,f,w0,t0):
         K[i]=kineticEnergy(L[i])
         P[i]=potentialEnergy(L[i])
     E = K+P
-    return(L,T,E)
+    return(L,E)
     
 def RK4(h,n,f,w0,t0):
     L=np.zeros((n,4))
@@ -95,34 +95,6 @@ def potentialEnergy(w):
     return (1/R)
 
 
-# H=[]  
-# E=[]
-# Erk4=[]
-# Erk2=[]
-# Eeuler=[]
-# w=[1,0,0,1]
-# for h in range(1,100):
-#     h=h*1e-3
-#     print(h)
-#     E=Euler(h,int(10//h),majpos,w,0)
-#     Eeuler.append(abs(E[-2]-E[0]))
-#     E=RK2(h,int(10//h),majpos,w,0)
-#     Erk2.append(abs(E[-2]-E[0]))
-#     E=RK4(h,int(10//h),majpos,w,0)
-#     Erk4.append(abs(E[-2]-E[0]))
-#     H.append(h)
-    
-# plt.plot(H,Eeuler,label='euler')
-# plt.plot(H,Erk2, label='rk2')
-# plt.plot(H,Erk4, label='rk4')
-        
-# plt.legend()
-# plt.xscale('log')
-# plt.xlabel('timestep')
-# plt.ylabel('energy')
-# plt.yscale('log')
-
-
 def maxX(E):
     return((2*E)**0.5)
 
@@ -147,24 +119,70 @@ def poincarreSection(L):
 
 
 if __name__ == '__main__':
-    w= initialConditions(1/12)
-    L=[]
-    Llight=[]
-    sectionY=[]
-    sectionV=[]
-    L = RK4(1e-3,500,majpos_HH,w,0)
-    wl=w
-    tl=0
-    for i in range(500):
-        wl,tl=lightRK4(1e-3,majpos_HH,wl,tl)
-        Llight.append(norm(L[i,:])-norm(wl))
-        if not (norm(L[i,:])-norm(wl)):
-            print(norm(L[i,:])-norm(wl))
-    #tester la différence entre les deux RK4
-    sectionY,sectionV = poincarreSection(L)
+     H=[]
+     E=[]
+     L=[]
+     T=[]
+     Erk4=[]
+     Erk2=[]
+     Eeuler=[]
+     Llight=[]
+     sectionY=[]
+     sectionV=[]
+     
+     #trace orbits
+#     w=[1,0,0,1]
+#     h=1e-3
+#     Eul,E=Euler(h,50000,majpos,w,0)
+#     rk2,E=RK2(h,50000,majpos,w,0)
+#     rk4=RK4(h,50000,majpos,w,0)
+#     plt.plot(Eul[:,0],Eul[:,1],label='euler')
+#     plt.plot(rk2[:,0],rk2[:,1], label='rk2')
+#     plt.plot(rk4[:,0],rk4[:,1], label='rk4')
+#     plt.legend()
+#     plt.title('Integration of a circular orbit')
+     #end trace orbits
+
+    #trace energy variation /!\ add E to RK4
+#     w=[1,0,0,1]
+#     for h in range(1,100):
+#       h=h*1e-3
+#       print(h)
+#       L,E=Euler(h,int(10//h),majpos,w,0)
+#       Eeuler.append(abs(E[-2]-E[0]))
+#       L,E=RK2(h,int(10//h),majpos,w,0)
+#       Erk2.append(abs(E[-2]-E[0]))
+#       L,E=RK4(h,int(10//h),majpos,w,0)
+#       Erk4.append(abs(E[-2]-E[0]))
+#       H.append(h)
+#        
+#     plt.plot(H,Eeuler,label='euler')
+#     plt.plot(H,Erk2, label='rk2')
+#     plt.plot(H,Erk4, label='rk4')
+#            
+#     plt.legend()
+#
+#     plt.xscale('log')
+#     plt.xlabel('timestep')
+#     plt.ylabel('energy')
+#     plt.yscale('log')
+    #end trace energy variation
     
-    plt.scatter(sectionY,sectionV,marker='+')
-    plt.xlabel('position along y')
-    plt.ylabel('speed along y')
+    
+     w= initialConditions(1/12)
+     L = RK4(1e-3,10000,majpos_HH,w,0)
+     wl=w
+     tl=0
+     for i in range(10000):
+         wl,tl=lightRK4(1e-3,majpos_HH,wl,tl)
+         Llight.append(norm(L[i,:])-norm(wl))
+         if not (norm(L[i,:])-norm(wl)):
+             print(norm(L[i,:])-norm(wl))
+         #tester la différence entre les deux RK4
+         sectionY,sectionV = poincarreSection(L)
+    
+     plt.scatter(sectionY,sectionV,marker='+')
+     plt.xlabel('position along y')
+     plt.ylabel('speed along y')
     
     
